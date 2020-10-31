@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="nowLoc"
+            type="String" />
+
+        <variable
+            name="nowLocGeo"
+            type="String" />
+
+        <variable
+            name="nowUpdate"
+            type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <TextView
+            android:id="@+id/txt_title_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재 위치 : "
+            app:layout_constraintBottom_toTopOf="@+id/txt_title_2"
+            app:layout_constraintEnd_toStartOf="@+id/txt_now_loc_geo"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/txt_now_loc_geo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{nowLocGeo, default=`nowLocGeo`}"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_title_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_title_1"
+            app:layout_constraintTop_toTopOf="@+id/txt_title_1" />
+
+        <TextView
+            android:id="@+id/txt_title_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="현재 좌표 : "
+            app:layout_constraintEnd_toStartOf="@+id/txt_now_loc"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/txt_title_3"
+            app:layout_constraintTop_toBottomOf="@id/txt_title_1" />
+
+        <TextView
+            android:id="@+id/txt_now_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{nowLoc, default=`nowLoc`}"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_title_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_title_2"
+            app:layout_constraintTop_toTopOf="@+id/txt_title_2" />
+
+        <TextView
+            android:id="@+id/txt_title_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="업데이트 상태 : "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txt_now"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_title_2" />
+
+        <TextView
+            android:id="@+id/txt_now"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{nowUpdate, default=`nowUpdate`}"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_title_3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/txt_title_3"
+            app:layout_constraintTop_toTopOf="@+id/txt_title_3" />
+
+
+        <Button
+            android:id="@+id/btn_update_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="update start"
+            app:layout_constraintBottom_toTopOf="@+id/btn_update_finish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_title_2"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <Button
+            android:id="@+id/btn_update_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="update finish"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_update_start" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
