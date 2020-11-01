@@ -37,12 +37,7 @@ public class getPermissionActivity extends AppCompatActivity {
 
 
     private void requestPermission() {
-//        if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0]))
-//            Toast.makeText(this, "위치 권한을 항상 허용으로 설정 해주세요.", Toast.LENGTH_LONG).show();
-//        else if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) &&
-//                ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[1]))
-//            Toast.makeText(this, "위치 권한을 항상 허용으로 설정 해주세요.", Toast.LENGTH_LONG).show();
-        ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
+       ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
     }
 
     private void onSucceedAndGo() {
