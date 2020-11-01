@@ -14,7 +14,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -46,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    String[] REQUIRED_PERMISSIONS = {
-            Manifest.permission.ACCESS_FINE_LOCATION
+    private final String[] REQUIRED_PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_BACKGROUND_LOCATION
     };
 
     @Override
@@ -58,8 +62,12 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         if (!locationStatus()) dialogWhenOffLocationService();
-        else checkPermission();
-
+        else {
+            if (!checkPermission()) {
+                startActivity(new Intent(this, getPermissionActivity.class));
+                finish();
+            }
+        }
         binding.btnUpdateStart.setOnClickListener(v -> start(true));
         binding.btnUpdateFinish.setOnClickListener(v -> start(false));
 
@@ -127,38 +135,17 @@ public class MainActivity extends AppCompatActivity {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int permsRequestCode, @NonNull String[] permissions, @NonNull int[] grandResults) {
-
-        if (permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
-            boolean check_result = true;
-
-            for (int result : grandResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    check_result = false;
-                    break;
-                }
-            }
-
-            if (!check_result) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])) {
-                    Toast.makeText(this, "권한이 거부되었습니다. 허용해야 어플 사용이 가능합니다.", Toast.LENGTH_LONG).show();
-                    finish();
-                } else
-                    Toast.makeText(this, "권한이 거부되었습니다. 허용해야 어플 사용이 가능합니다.", Toast.LENGTH_LONG).show();
-            }
-
-        }
-    }
-
-    void checkPermission() {
+    private boolean checkPermission() {
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
+                REQUIRED_PERMISSIONS[0]);
 
-        if (hasFineLocationPermission != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0]))
-                Toast.makeText(this, "위치 권한을 허용해주세요.", Toast.LENGTH_LONG).show();
-            ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
+                    REQUIRED_PERMISSIONS[1]);
+
+        if (hasFineLocationPermission != PackageManager.PERMISSION_GRANTED)
+            return false;
+        else
+            return true;
     }
 }
