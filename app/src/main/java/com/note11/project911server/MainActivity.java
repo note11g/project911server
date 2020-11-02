@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             start(true);
         });
         binding.btnUpdateFinish.setOnClickListener(v -> start(false));
-
     }
 
     private void start(Boolean startORFinish) {

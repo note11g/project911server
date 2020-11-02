@@ -51,19 +51,10 @@ public class getPermissionActivity extends AppCompatActivity {
         if (permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
             boolean check_result = true;
 
-//            for (int result : grandResults) {
-//                if (result != PackageManager.PERMISSION_GRANTED) {
-//                    check_result = false;
-//                    break;
-//                }
-//            }
-
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
-                if (grandResults[0] != PackageManager.PERMISSION_GRANTED)
-                    check_result = false;//7.0
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+                if (grandResults[0] != PackageManager.PERMISSION_GRANTED) check_result = false;
             } else {
-                if (grandResults[1] != PackageManager.PERMISSION_GRANTED)
-                    check_result = false;//else
+                if (grandResults[1] != PackageManager.PERMISSION_GRANTED) check_result = false;
             }
 
             if (!check_result) {
@@ -85,7 +76,6 @@ public class getPermissionActivity extends AppCompatActivity {
             } else {
                 onSucceedAndGo();
             }
-
         }
     }
 }
