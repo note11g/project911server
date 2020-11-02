@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //finish update service
             mLM.removeUpdates(mLocationListener);//자원해제
+            deleteRTDB();
             updateUI(0, 0, 0, false);
             Toast.makeText(this, "finished", Toast.LENGTH_SHORT).show();
         }
@@ -174,5 +175,10 @@ public class MainActivity extends AppCompatActivity {
         }
         childUpdates.put("/list/" + time, postValues);
         mPostReference.updateChildren(childUpdates);
+    }
+
+    public void deleteRTDB(){
+        mPostReference = FirebaseDatabase.getInstance().getReference("/list/"+getStartTime);
+        mPostReference.removeValue();
     }
 }
