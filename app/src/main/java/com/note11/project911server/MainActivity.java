@@ -21,7 +21,13 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.note11.project911server.databinding.ActivityMainBinding;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int GPS_ENABLE_REQUEST_CODE = 5000;
     private static final int PERMISSIONS_REQUEST_CODE = 4000;
     private LocationManager mLM;
+    private DatabaseReference mPostReference;
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             double longitude = location.getLongitude(); //경도
@@ -68,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
-        binding.btnUpdateStart.setOnClickListener(v -> start(true));
+        binding.btnUpdateStart.setOnClickListener(v -> {
+            Long time = new Date().getTime();
+            postFirebaseDatabase(true, 123.456, 456.678, 1, time);
+            start(true);});
         binding.btnUpdateFinish.setOnClickListener(v -> start(false));
 
     }
@@ -105,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
     private void uploadAtFirebase(double longitude, double latitude, float accuracy) {
         //made model and upload this function
         //TODO upload at RealTime DataBase
-
     }
 
     private void updateUI(double longitude, double latitude, float accuracy, boolean updateStatus) {
@@ -147,5 +156,17 @@ public class MainActivity extends AppCompatActivity {
             return false;
         else
             return true;
+    }
+
+    public void postFirebaseDatabase(boolean add, double longitude, double latitude, int check, long time){
+        mPostReference = FirebaseDatabase.getInstance().getReference();
+        Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> postValues = null;
+        if(add){
+            FirebasePost post = new FirebasePost(longitude, latitude, check, time);
+            postValues = post.toMap();
+        }
+        childUpdates.put("/list/" + time, postValues);
+        mPostReference.updateChildren(childUpdates);
     }
 }
