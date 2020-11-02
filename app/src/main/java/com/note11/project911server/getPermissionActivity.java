@@ -58,7 +58,7 @@ public class getPermissionActivity extends AppCompatActivity {
 //                }
 //            }
 
-            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
                 if (grandResults[0] != PackageManager.PERMISSION_GRANTED)
                     check_result = false;//7.0
             } else {
