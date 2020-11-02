@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CODE = 4000;
     private LocationManager mLM;
     private DatabaseReference mPostReference;
+    private long getStartTime;
     private final LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
             double longitude = location.getLongitude(); //경도
@@ -76,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         binding.btnUpdateStart.setOnClickListener(v -> {
-            Long time = new Date().getTime();
-            postFirebaseDatabase(true, 123.456, 456.678, 1, time);
-            start(true);});
+            getStartTime = new Date().getTime();
+            uploadRTDB(true,  0, 0, 1, getStartTime);
+            start(true);
+        });
         binding.btnUpdateFinish.setOnClickListener(v -> start(false));
 
     }
@@ -113,8 +115,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void uploadAtFirebase(double longitude, double latitude, float accuracy) {
-        //made model and upload this function
-        //TODO upload at RealTime DataBase
+        if (accuracy>=1.0f){
+            //upload
+            //TODO upload at RealTime DataBase
+            uploadRTDB(true, longitude, latitude, 1, getStartTime);
+        } else
+            Toast.makeText(this, "위치 얻기를 재시도 중입니다", Toast.LENGTH_SHORT).show();
     }
 
     private void updateUI(double longitude, double latitude, float accuracy, boolean updateStatus) {
@@ -158,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
     }
 
-    public void postFirebaseDatabase(boolean add, double longitude, double latitude, int check, long time){
+    public void uploadRTDB(boolean add, double longitude, double latitude, int check, long time){
         mPostReference = FirebaseDatabase.getInstance().getReference();
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;

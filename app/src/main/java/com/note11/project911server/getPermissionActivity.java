@@ -37,7 +37,7 @@ public class getPermissionActivity extends AppCompatActivity {
 
 
     private void requestPermission() {
-       ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
     }
 
     private void onSucceedAndGo() {
@@ -51,11 +51,19 @@ public class getPermissionActivity extends AppCompatActivity {
         if (permsRequestCode == PERMISSIONS_REQUEST_CODE && grandResults.length == REQUIRED_PERMISSIONS.length) {
             boolean check_result = true;
 
-            for (int result : grandResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    check_result = false;
-                    break;
-                }
+//            for (int result : grandResults) {
+//                if (result != PackageManager.PERMISSION_GRANTED) {
+//                    check_result = false;
+//                    break;
+//                }
+//            }
+
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
+                if (grandResults[0] != PackageManager.PERMISSION_GRANTED)
+                    check_result = false;//7.0
+            } else {
+                if (grandResults[1] != PackageManager.PERMISSION_GRANTED)
+                    check_result = false;//else
             }
 
             if (!check_result) {
