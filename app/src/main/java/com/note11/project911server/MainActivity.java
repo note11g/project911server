@@ -1,9 +1,7 @@
 package com.note11.project911server;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
@@ -11,21 +9,24 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.note11.project911server.databinding.ActivityMainBinding;
+import com.note11.project911server.util.FirebasePost;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Date;
 
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private static final int GPS_ENABLE_REQUEST_CODE = 5000;
     private static final int PERMISSIONS_REQUEST_CODE = 4000;
+    private Geocoder geocoder;
     private LocationManager mLM;
     private DatabaseReference mPostReference;
     private long getStartTime;
@@ -76,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
+
+        geocoder = new Geocoder(this);
         binding.btnUpdateStart.setOnClickListener(v -> {
             getStartTime = new Date().getTime();
             uploadRTDB(true,  0, 0, 1, getStartTime);
@@ -123,9 +127,36 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "위치 얻기를 재시도 중입니다", Toast.LENGTH_SHORT).show();
     }
 
+    public String geoCodingService ( double latitude, double longitude){
+
+
+            Geocoder geocoder = new Geocoder(this, Locale.KOREAN);
+            List<Address> addresses;
+
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 7);
+            } catch (IOException ioException) {
+                //네트워크 문제
+                Toast.makeText(this, "네트워크가 정상적이지 않아 오류가 발생하였습니다.", Toast.LENGTH_LONG).show();
+                return "위치 서비스 사용불가";
+            } catch (IllegalArgumentException illegalArgumentException) {
+                Toast.makeText(this, "잘못된 GPS 좌표", Toast.LENGTH_LONG).show();
+                return "잘못된 GPS 좌표";
+            }
+
+
+            if (addresses == null || addresses.size() == 0) {
+                Toast.makeText(this, "주소 미발견", Toast.LENGTH_LONG).show();
+                return "주소 미발견";
+            }
+            Address address = addresses.get(0);
+            return address.getAddressLine(0).toString();
+        }//end fun
+
     private void updateUI(double longitude, double latitude, float accuracy, boolean updateStatus) {
-        binding.setAccuracy("신뢰도 : " + accuracy + "%");
-        binding.setNowLoc(longitude + "," + latitude);
+        binding.setNowLoc("("+longitude + "," + latitude+")");
+        binding.setNowLocGeo(geoCodingService(latitude, longitude));
+
         binding.setNowUpdate(updateStatus ? "실행 중" : "비활성화");
     }
 

@@ -1,4 +1,4 @@
-package com.note11.project911server;
+package com.note11.project911server.util;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;

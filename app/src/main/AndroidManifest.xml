@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project911server">
-        <activity android:name=".PermissionActivity"></activity>
         <activity android:name=".getPermissionActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -1,6 +1,7 @@
 package com.note11.project911server;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -19,6 +20,7 @@ import com.note11.project911server.databinding.ActivityGetPermissionBinding;
 public class getPermissionActivity extends AppCompatActivity {
 
 
+    private static final int PERMISSION_REQUEST_CODE = 2000;//window alert
     private static final int PERMISSIONS_REQUEST_CODE = 4000;
     private final String[] REQUIRED_PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -35,9 +37,12 @@ public class getPermissionActivity extends AppCompatActivity {
         binding.btnGoSetting.setOnClickListener(v -> requestPermission());
     }
 
-
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, REQUIRED_PERMISSIONS, PERMISSIONS_REQUEST_CODE);
+    }
+
+    private void requestWindowPermission(){
+        startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), PERMISSION_REQUEST_CODE);
     }
 
     private void onSucceedAndGo() {
@@ -74,8 +79,23 @@ public class getPermissionActivity extends AppCompatActivity {
                         finish();
                     }
             } else {
+                requestWindowPermission();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (Settings.canDrawOverlays(this)) {
+                // 퍼미션 허용됨
+                Toast.makeText(this, "권한 허용 됨", Toast.LENGTH_SHORT).show();
+//              startFloatingService(INTENT_COMMAND_NOTE);
                 onSucceedAndGo();
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

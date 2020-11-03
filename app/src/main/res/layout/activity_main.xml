@@ -15,9 +15,6 @@
         <variable
             name="nowUpdate"
             type="String" />
-        <variable
-            name="accuracy"
-            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,22 +49,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="현재 좌표 : "
+            android:text="@{nowLoc, default=`nowLoc`}"
             app:layout_constraintBottom_toTopOf="@id/txt_title_3"
-            app:layout_constraintEnd_toStartOf="@+id/txt_now_loc"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_title_1" />
 
-        <TextView
-            android:id="@+id/txt_now_loc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{nowLoc, default=`nowLoc`}"
-            app:layout_constraintBottom_toBottomOf="@+id/txt_title_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_title_2"
-            app:layout_constraintTop_toTopOf="@+id/txt_title_2" />
+
 
         <TextView
             android:id="@+id/txt_title_3"
@@ -90,16 +78,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/txt_title_3"
             app:layout_constraintTop_toTopOf="@+id/txt_title_3" />
-
-        <TextView
-            android:id="@+id/txt_accuracy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{accuracy}"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toEndOf="@+id/txt_now"
-            app:layout_constraintStart_toStartOf="@+id/txt_title_3"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title_3" />
 
 
         <Button
